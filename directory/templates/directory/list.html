@@ -1,0 +1,7 @@
+{# simplest template for listing the directory #}
+<h1>{{ directory_name }}</h1>
+<ul>
+{% for file in directory_files %}
+    <li><a href="{% url 'directory_download_file' file %}">{{ file }}</a></li>
+{% endfor %}
+</ul>
