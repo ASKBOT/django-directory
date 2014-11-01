@@ -12,7 +12,7 @@ setup(
     author_email = 'evgeny.fadeev@gmail.com',
     license = 'MIT',
     keywords = 'django, list, download, files, directory',
-    #url = 'http://askbot.org',
+    url = 'https://github.com/ASKBOT/django-directory',
     include_package_data = True,
     #install_requires = list(),
     classifiers = [
