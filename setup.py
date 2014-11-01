@@ -1,3 +1,4 @@
+"""Copyright Askbot SpA, 2014"""
 import ez_setup
 ez_setup.use_setuptools()
 from setuptools import setup, find_packages
@@ -20,7 +21,7 @@ setup(
         'Environment :: Web Environment',
         'Framework :: Django',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: MIT License',
+        'License :: OSI Approved :: GPLv3',
         'Natural Language :: English',
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 2.5',

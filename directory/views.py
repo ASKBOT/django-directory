@@ -1,3 +1,4 @@
+"""Copyright Askbot SpA 2014, Licensed under GPLv3 license."""
 import os
 from django.conf import settings
 from django.core.exceptions import PermissionDenied, ImproperlyConfigured
