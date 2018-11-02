@@ -1,3 +1,4 @@
+#! /usr/bin/env python2
 """Copyright Askbot SpA, 2014"""
 import ez_setup
 ez_setup.use_setuptools()
