@@ -5,11 +5,8 @@ from django.core.exceptions import PermissionDenied, ImproperlyConfigured
 from django.core.urlresolvers import reverse
 from django.http import StreamingHttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render
+from django.utils.module_loading import import_string as import_module
 
-try:
-    from django.utils.module_loading import import_string as import_module
-except ImportError:
-    from django.utils.module_loading import import_by_path as import_module
 
 #utils functions
 def check_access(request):
