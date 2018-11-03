@@ -1,1 +1,4 @@
+/py27/
+/demo/
+/django_directory.egg-info/
 *.pyc
