@@ -16,7 +16,9 @@ setup(
     keywords = 'django, list, download, files, directory',
     url = 'https://github.com/ASKBOT/django-directory',
     include_package_data = True,
-    #install_requires = list(),
+    install_requires = [
+        'Django >=1.11.16, <2',
+    ],
     classifiers = [
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',
