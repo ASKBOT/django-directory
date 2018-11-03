@@ -3,7 +3,7 @@ while controlling who can access the files.
 
 Installation
 ============
-Syncdb is not required as there are no models.
+`python manage.py migrate` is not required as there are no models.
 
 Add to the `settings.py` file::
 
