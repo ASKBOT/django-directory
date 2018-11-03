@@ -1,5 +1,6 @@
 """Copyright Askbot SpA 2014, Licensed under GPLv3 license."""
 import os
+import string
 from django.conf import settings
 from django.core.exceptions import PermissionDenied, ImproperlyConfigured
 from django.core.urlresolvers import reverse
@@ -33,14 +34,17 @@ def check_access(request):
         )
 
 
-def get_file_names(directory):
+def get_names(directory):
     """Returns list of file names within directory"""
     contents = os.listdir(directory)
-    files = list()
+    files, directories = [], []
     for item in contents:
-        if os.path.isfile(os.path.join(directory, item)):
+        candidate = os.path.join(directory, item)
+        if os.path.isdir(candidate):
+            directories.append(item)
+        elif os.path.isfile(candidate):
             files.append(item)
-    return files
+    return files, directories
 
 def read_file_chunkwise(file_obj):
     """Reads file in 32Kb chunks"""
@@ -50,17 +54,23 @@ def read_file_chunkwise(file_obj):
             break
         yield data
 
-#view functions below
-def index(request):
-    return HttpResponseRedirect(reverse('directory_list'))
+def _get_abs_virtual_root():
+    return os.path.abspath(os.path.realpath(settings.DIRECTORY_DIRECTORY))
 
-def list_directory(request):
+def _to_link_tuple(directory, basename):
+    path = os.path.join(directory, basename)
+    link_target = os.path.relpath(path, start=_get_abs_virtual_root())
+    return basename, link_target
+
+def _list_directory(request, directory):
     """default view - listing of the directory"""
     if check_access(request):
-        directory = settings.DIRECTORY_DIRECTORY
+        files, directories = get_names(directory)
+        directory_name = ('' if (directory == _get_abs_virtual_root()) else os.path.basename(directory)) + '/'
         data = {
-            'directory_name': os.path.basename(directory),
-            'directory_files': get_file_names(directory)
+            'directory_name': directory_name,
+            'directory_files': [_to_link_tuple(directory, f) for f in sorted(files, key=string.lower)],
+            'directory_directories': [_to_link_tuple(directory, d) for d in sorted(directories, key=string.lower)],
         }
         template = getattr(settings, 'DIRECTORY_TEMPLATE', 'directory/list.html')
         return render(request, template, data)
@@ -68,23 +78,25 @@ def list_directory(request):
     else:
         raise PermissionDenied()
 
-def download_file(request, file_name):
+def _download_file(request, file_path):
     """allows authorized user to download a given file"""
 
-    if os.path.sep in file_name:
-        raise PermissionDenied()
-
     if check_access(request):
-        directory = settings.DIRECTORY_DIRECTORY
-
-        #make sure that file exists within current directory
-        files = get_file_names(directory)
-        if file_name in files:
-            file_path = os.path.join(directory, file_name)
             response = StreamingHttpResponse(content_type='application/force-download')
-            response['Content-Disposition'] = 'attachment; filename=%s' % file_name
-            file_obj = open(os.path.join(directory, file_name))
+            response['Content-Disposition'] = 'attachment; filename=%s' % os.path.basename(file_path)
+            file_obj = open(file_path)
             response.streaming_content = read_file_chunkwise(file_obj)
             return response
-        else:
-            raise Http404
+
+def browse(request, path):
+    virtual_root = _get_abs_virtual_root()
+    eventual_path = os.path.abspath(os.path.realpath(os.path.join(settings.DIRECTORY_DIRECTORY, path)))
+
+    if os.path.commonprefix([virtual_root, eventual_path]) != virtual_root:
+        # Someone is playing tricks with .. or %2e%2e or so
+        raise Http404
+
+    if os.path.isfile(eventual_path):
+        return _download_file(request, eventual_path)
+    else:
+        return _list_directory(request, eventual_path)

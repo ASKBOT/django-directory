@@ -5,8 +5,11 @@
 
 <h1>{{ directory_name }}</h1>
 <ul>
-{% for file in directory_files %}
-    <li><a href="{% url 'directory_download_file' file %}">{{ file }}</a></li>
+{% for basename, link_target in directory_directories %}
+    <li><a href="{% url 'directory_browse' link_target %}">{{ basename }}/</a></li>
+{% endfor %}
+{% for basename, link_target in directory_files %}
+    <li><a href="{% url 'directory_browse' link_target %}">{{ basename }}</a></li>
 {% endfor %}
 </ul>
 
