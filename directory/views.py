@@ -65,7 +65,10 @@ def read_file_chunkwise(file_obj):
 
 def _to_link_tuple(directory, basename):
     path = os.path.join(directory, basename)
-    link_target = os.path.relpath(path, start=_get_abs_virtual_root())
+    if _inside_virtual_root(_eventual_path(path)):
+        link_target = os.path.relpath(path, start=_get_abs_virtual_root())
+    else:
+        link_target = None
     return basename, link_target
 
 def _list_directory(request, directory):
