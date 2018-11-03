@@ -1,10 +1,10 @@
 #! /usr/bin/env python2
-"""Copyright Askbot SpA, 2014"""
+"""Copyright Askbot, SpA"""
 from setuptools import setup, find_packages
 
 setup(
-    name = "django-directory",
-    version = "0.0.1",
+    name='django-directory',
+    version = '0.0.2',
     description = 'A Django application to list and download files from a directory',
     packages = find_packages(),
     author = 'Evgeny.Fadeev',
