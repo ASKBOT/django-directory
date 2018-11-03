@@ -3,10 +3,11 @@ while controlling who can access the files.
 
 Installation
 ============
-Add to `INSTALLED_APPS` entry `'directory'`
 Syncdb is not required as there are no models.
 
 Add to the `settings.py` file::
+
+    INSTALLED_APPS += ['directory']
 
     DIRECTORY_DIRECTORY = '/path/to/dir'
 
