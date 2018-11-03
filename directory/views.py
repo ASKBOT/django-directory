@@ -51,7 +51,7 @@ def get_names(directory):
         candidate = os.path.join(directory, item)
         if os.path.isdir(candidate):
             directories.append(item)
-        elif os.path.isfile(candidate):
+        else:
             files.append(item)
     return files, directories
 
