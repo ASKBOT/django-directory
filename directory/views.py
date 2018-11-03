@@ -84,7 +84,7 @@ def download_file(request, file_name):
         files = get_file_names(directory)
         if file_name in files:
             file_path = os.path.join(directory, file_name)
-            response = StreamingHttpResponse(mimetype='application/force-download')
+            response = StreamingHttpResponse(content_type='application/force-download')
             response['Content-Disposition'] = 'attachment; filename=%s' % file_name
             file_obj = open(os.path.join(directory, file_name))
             response.streaming_content = read_file_chunkwise(file_obj)
