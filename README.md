@@ -1,4 +1,6 @@
-A simple app that allows listing and downloading files from a given directory, 
+A simple app
+for Django 1.11.x and Python 2.7
+that allows listing and downloading files from a given directory,
 while controlling who can access the files.
 
 Installation
