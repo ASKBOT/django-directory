@@ -33,6 +33,8 @@ def check_access(request):
             "'public', 'use-perms', and 'custom' are allowed"
         )
 
+def _eventual_path(path):
+    return os.path.abspath(os.path.realpath(path))
 
 def get_names(directory):
     """Returns list of file names within directory"""
@@ -55,7 +57,7 @@ def read_file_chunkwise(file_obj):
         yield data
 
 def _get_abs_virtual_root():
-    return os.path.abspath(os.path.realpath(settings.DIRECTORY_DIRECTORY))
+    return _eventual_path(settings.DIRECTORY_DIRECTORY)
 
 def _to_link_tuple(directory, basename):
     path = os.path.join(directory, basename)
@@ -90,7 +92,7 @@ def _download_file(request, file_path):
 
 def browse(request, path):
     virtual_root = _get_abs_virtual_root()
-    eventual_path = os.path.abspath(os.path.realpath(os.path.join(settings.DIRECTORY_DIRECTORY, path)))
+    eventual_path = _eventual_path(os.path.join(settings.DIRECTORY_DIRECTORY, path))
 
     if os.path.commonprefix([virtual_root, eventual_path]) != virtual_root:
         # Someone is playing tricks with .. or %2e%2e or so
