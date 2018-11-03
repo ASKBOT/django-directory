@@ -15,7 +15,7 @@ That's the directory to be listed.
 
 Add to the `urls.py` file the url entry, e.g.:
 
-    ('^backups/$', include('directory.urls')),
+    ('^files/', include('directory.urls')),
 
 Dependencies
 ============
