@@ -33,6 +33,13 @@ def check_access(request):
             "'public', 'use-perms', and 'custom' are allowed"
         )
 
+def _get_abs_virtual_root():
+    return _eventual_path(settings.DIRECTORY_DIRECTORY)
+
+def _inside_virtual_root(eventual_path):
+    virtual_root = _get_abs_virtual_root()
+    return os.path.commonprefix([virtual_root, eventual_path]) == virtual_root
+
 def _eventual_path(path):
     return os.path.abspath(os.path.realpath(path))
 
@@ -55,9 +62,6 @@ def read_file_chunkwise(file_obj):
         if not data:
             break
         yield data
-
-def _get_abs_virtual_root():
-    return _eventual_path(settings.DIRECTORY_DIRECTORY)
 
 def _to_link_tuple(directory, basename):
     path = os.path.join(directory, basename)
@@ -94,7 +98,7 @@ def browse(request, path):
     virtual_root = _get_abs_virtual_root()
     eventual_path = _eventual_path(os.path.join(settings.DIRECTORY_DIRECTORY, path))
 
-    if os.path.commonprefix([virtual_root, eventual_path]) != virtual_root:
+    if not _inside_virtual_root(eventual_path):
         # Someone is playing tricks with .. or %2e%2e or so
         raise Http404
 
