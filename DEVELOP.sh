@@ -24,4 +24,4 @@ if [[ ! -d demo ]]; then
     echo "DIRECTORY_DIRECTORY = '${DIRECTORY}'"$'\n'"INSTALLED_APPS += ['directory']" >> demo/demo/settings.py
 fi
 
-${PYTHON} demo/manage.py runserver
+python demo/manage.py runserver
