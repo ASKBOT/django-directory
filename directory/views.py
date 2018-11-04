@@ -1,6 +1,5 @@
 """Copyright Askbot SpA 2014, Licensed under GPLv3 license."""
 import os
-import string
 from django.conf import settings
 from django.core.exceptions import PermissionDenied, ImproperlyConfigured
 from django.http import StreamingHttpResponse, Http404, HttpResponseRedirect
@@ -71,6 +70,9 @@ def _to_link_tuple(directory, basename):
         link_target = None
     return basename, link_target
 
+def _to_lower(text):
+    return text.lower()
+
 def _list_directory(request, directory):
     """default view - listing of the directory"""
     if check_access(request):
@@ -78,8 +80,8 @@ def _list_directory(request, directory):
         directory_name = ('' if (directory == _get_abs_virtual_root()) else os.path.basename(directory)) + '/'
         data = {
             'directory_name': directory_name,
-            'directory_files': [_to_link_tuple(directory, f) for f in sorted(files, key=string.lower)],
-            'directory_directories': [_to_link_tuple(directory, d) for d in sorted(directories, key=string.lower)],
+            'directory_files': [_to_link_tuple(directory, f) for f in sorted(files, key=_to_lower)],
+            'directory_directories': [_to_link_tuple(directory, d) for d in sorted(directories, key=_to_lower)],
         }
         template = getattr(settings, 'DIRECTORY_TEMPLATE', 'directory/list.html')
         return render(request, template, data)
