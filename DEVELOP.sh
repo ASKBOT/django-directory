@@ -20,7 +20,7 @@ set +u; source ${VIRTUALENV_NAME:?}/bin/activate; set -u
 
 if [[ ! -d demo ]]; then
     django-admin startproject demo
-    echo $'from django.conf.urls import include\nurlpatterns.append(url("^files/", include("directory.urls")))' >> demo/demo/urls.py
+    echo $'from django.urls import include, path\nurlpatterns.append(path("files/", include("directory.urls")))' >> demo/demo/urls.py
     echo "DIRECTORY_DIRECTORY = '${DIRECTORY}'"$'\n'"INSTALLED_APPS += ['directory']" >> demo/demo/settings.py
 fi
 
