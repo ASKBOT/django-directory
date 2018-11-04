@@ -3,13 +3,13 @@
 set -e
 set -u
 
-: ${PYTHON:=python2.7}
-: ${VIRTUALENV_NAME:=py27}
+: ${PYTHON:=python3}
+: ${VIRTUALENV_NAME:=py3}
 : ${DIRECTORY:=.}
 
 if [[ -z $(type -P "${PYTHON}") ]]; then
-    echo "ERROR: A python version 2 executable is expected to be on your path" >&2
-    echo "edit the path above or install python 2 and try again." >&2
+    echo "ERROR: A python version 3 executable is expected to be on your path" >&2
+    echo "edit the path above or install python 3 and try again." >&2
     exit 1
 fi
 

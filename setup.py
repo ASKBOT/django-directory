@@ -1,4 +1,4 @@
-#! /usr/bin/env python2
+#! /usr/bin/env python
 """Copyright Askbot, SpA"""
 from setuptools import setup, find_packages
 
