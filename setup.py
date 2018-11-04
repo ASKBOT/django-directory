@@ -14,7 +14,7 @@ setup(
     url = 'https://github.com/ASKBOT/django-directory',
     include_package_data = True,
     install_requires = [
-        'Django >=1.11.16, <2',
+        'Django >=1.11.16',
     ],
     classifiers = [
         'Development Status :: 4 - Beta',
