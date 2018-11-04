@@ -3,9 +3,9 @@
 set -e
 set -u
 
-PYTHON=python2.7
-VIRTUALENV_NAME=py27
-DIRECTORY=.
+: ${PYTHON:=python2.7}
+: ${VIRTUALENV_NAME:=py27}
+: ${DIRECTORY:=.}
 
 if [[ -z $(type -P "${PYTHON}") ]]; then
     echo "ERROR: A python version 2 executable is expected to be on your path" >&2
