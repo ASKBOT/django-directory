@@ -95,7 +95,7 @@ def _download_file(request, file_path):
     if check_access(request):
             response = StreamingHttpResponse(content_type='application/force-download')
             response['Content-Disposition'] = 'attachment; filename=%s' % os.path.basename(file_path)
-            file_obj = open(file_path)
+            file_obj = open(file_path, 'rb')
             response.streaming_content = read_file_chunkwise(file_obj)
             return response
 
