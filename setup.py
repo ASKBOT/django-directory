@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='django-directory',
-    version = '0.0.2',
+    version = '0.0.3',
     description = 'A Django application to list and download files from a directory',
     packages = find_packages(),
     author = 'Evgeny.Fadeev',
