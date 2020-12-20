@@ -14,7 +14,7 @@ setup(
     url = 'https://github.com/ASKBOT/django-directory',
     include_package_data = True,
     install_requires = [
-        'Django >=1.11.16',
+        'Django >= 1.8',
     ],
     classifiers = [
         'Development Status :: 4 - Beta',
@@ -25,9 +25,10 @@ setup(
         'Natural Language :: English',
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
         'Topic :: Internet :: WWW/HTTP :: WSGI :: Application',
     ],
     long_description = """Provides a directory listing and links to files,
 while controlling who has the access,
-tested with Django <= 1.8"""
+tested with Django >= 1.8, not tested with Django 3."""
 )
