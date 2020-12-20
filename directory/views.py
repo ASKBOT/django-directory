@@ -2,10 +2,10 @@
 import os
 from django.conf import settings
 from django.core.exceptions import PermissionDenied, ImproperlyConfigured
-from django.http import StreamingHttpResponse, Http404, HttpResponseRedirect
+from django.http import StreamingHttpResponse, Http404
 from django.shortcuts import render
 try:
-    from django.urls import reverse
+    from django.urls import reverse # pylint: disable=unused-import
 except ImportError:
     from django.core.urlresolvers import reverse
 
@@ -16,25 +16,29 @@ from django.utils.module_loading import import_string as import_module
 def check_access(request):
     """Returns true if user has access to the directory"""
     access_mode = getattr(settings, 'DIRECTORY_ACCESS_MODE', 'public')
+
     if access_mode == 'public':
         return True
-    elif access_mode == 'use-perms':
+
+    if access_mode == 'use-perms':
         if request.user.is_anonymous():
             return False
-        else:
-            return request.user.has_perm('directory.read')
-    elif access_mode == 'custom':
+        return request.user.has_perm('directory.read')
+
+    if access_mode == 'custom':
         check_perm = settings.DIRECTORY_ACCESS_FUNCTION
         if isinstance(check_perm, str):
             check_perm = import_module(check_perm)
         elif not hasattr(check_perm, '__call__'):
-            raise ImproperlyConfigured('DIRECTORY_ACCESS_FUNCTION must either be a function or python path')
+            raise ImproperlyConfigured(
+                'DIRECTORY_ACCESS_FUNCTION must either be a function or python path'
+            )
         return check_perm(request)
-    else:
-        raise ImproperlyConfigured(
-            "Invalid setting DIRECTORY_ACCESS_MODE: only values "
-            "'public', 'use-perms', and 'custom' are allowed"
-        )
+
+    raise ImproperlyConfigured(
+        "Invalid setting DIRECTORY_ACCESS_MODE: only values "
+        "'public', 'use-perms', and 'custom' are allowed"
+    )
 
 def _get_abs_virtual_root():
     return _eventual_path(settings.DIRECTORY_DIRECTORY)
@@ -81,30 +85,36 @@ def _list_directory(request, directory):
     """default view - listing of the directory"""
     if check_access(request):
         files, directories = get_names(directory)
-        directory_name = ('' if (directory == _get_abs_virtual_root()) else os.path.basename(directory)) + '/'
+
+        if directory == _get_abs_virtual_root():
+            directory_name = ''
+        else:
+            directory_name = os.path.basename(directory) + '/'
+
+        file_links = [_to_link_tuple(directory, f) for f in sorted(files, key=_to_lower)]
+        dir_links = [_to_link_tuple(directory, d) for d in sorted(directories, key=_to_lower)]
         data = {
             'directory_name': directory_name,
-            'directory_files': [_to_link_tuple(directory, f) for f in sorted(files, key=_to_lower)],
-            'directory_directories': [_to_link_tuple(directory, d) for d in sorted(directories, key=_to_lower)],
+            'directory_files': file_links,
+            'directory_directories': dir_links
         }
         template = getattr(settings, 'DIRECTORY_TEMPLATE', 'directory/list.html')
         return render(request, template, data)
-        
-    else:
-        raise PermissionDenied()
+    raise PermissionDenied()
 
 def _download_file(request, file_path):
-    """allows authorized user to download a given file"""
-
+    """Allows authorized user to download a given file"""
     if check_access(request):
-            response = StreamingHttpResponse(content_type='application/force-download')
-            response['Content-Disposition'] = 'attachment; filename=%s' % os.path.basename(file_path)
-            file_obj = open(file_path, 'rb')
-            response.streaming_content = read_file_chunkwise(file_obj)
-            return response
+        response = StreamingHttpResponse(content_type='application/force-download')
+        response['Content-Disposition'] = 'attachment; filename=%s' % os.path.basename(file_path)
+        file_obj = open(file_path, 'rb')
+        response.streaming_content = read_file_chunkwise(file_obj)
+        return response
+    raise PermissionDenied()
+
 
 def browse(request, path):
-    virtual_root = _get_abs_virtual_root()
+    """Directory list view"""
     eventual_path = _eventual_path(os.path.join(settings.DIRECTORY_DIRECTORY, path))
 
     if not _inside_virtual_root(eventual_path):
@@ -113,5 +123,5 @@ def browse(request, path):
 
     if os.path.isfile(eventual_path):
         return _download_file(request, eventual_path)
-    else:
-        return _list_directory(request, eventual_path)
+
+    return _list_directory(request, eventual_path)
