@@ -25,7 +25,7 @@ def check_access(request):
             return request.user.has_perm('directory.read')
     elif access_mode == 'custom':
         check_perm = settings.DIRECTORY_ACCESS_FUNCTION
-        if isinstance(check_perm, basestring):
+        if isinstance(check_perm, str):
             check_perm = import_module(check_perm)
         elif not hasattr(check_perm, '__call__'):
             raise ImproperlyConfigured('DIRECTORY_ACCESS_FUNCTION must either be a function or python path')
