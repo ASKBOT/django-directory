@@ -4,7 +4,11 @@ from django.conf import settings
 from django.core.exceptions import PermissionDenied, ImproperlyConfigured
 from django.http import StreamingHttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render
-from django.urls import reverse
+try:
+    from django.urls import reverse
+except ImportError:
+    from django.core.urlresolvers import reverse
+
 from django.utils.module_loading import import_string as import_module
 
 

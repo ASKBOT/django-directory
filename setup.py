@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='django-directory',
-    version = '0.0.3',
+    version = '0.0.4',
     description = 'A Django application to list and download files from a directory',
     packages = find_packages(),
     author = 'Evgeny.Fadeev',
@@ -27,5 +27,7 @@ setup(
         'Programming Language :: Python :: 2.7',
         'Topic :: Internet :: WWW/HTTP :: WSGI :: Application',
     ],
-    long_description = """Provides a directory listing and links to files, while controlling who has the access"""
+    long_description = """Provides a directory listing and links to files,
+while controlling who has the access,
+tested with Django <= 1.8"""
 )
