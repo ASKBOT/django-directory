@@ -21,7 +21,7 @@ def check_access(request):
         return True
 
     if access_mode == 'use-perms':
-        if request.user.is_anonymous():
+        if request.user.is_anonymous:
             return False
         return request.user.has_perm('directory.read')
 
