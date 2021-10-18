@@ -1,5 +1,5 @@
 A simple app
-for Django 1.11.x and Python 2.7
+for Django 3.2.8 and Python 3.9.2
 that allows listing and downloading files from a given directory,
 while controlling who can access the files.
 
@@ -17,21 +17,21 @@ That's the directory to be listed.
 
 Add to the `urls.py` file the url entry, e.g.:
 
-    ('^files/', include('directory.urls')),
+    ('files/', include('directory.urls')),
 
 Dependencies
 ============
-If setting `DIRECTORY_ACCESS_MODE` is set to `'check-perms'`, or (possibly) `'custom'`,
+If setting `DIRECTORY_ACCESS_MODE` is set to `'use-perms'`, or (possibly) `'custom'`,
 then this app will require `django.contrib.auth` installed in the project.
 
 Configuration
 =============
 
-Setting `DIRECTORY_ACCESS_MODE`, can be one of: `'public'`, `'check-perms'`, `'custom'`,
+Setting `DIRECTORY_ACCESS_MODE`, can be one of: `'public'`, `'use-perms'`, `'custom'`,
 value `'public'` is default.
 
 * value `'public'` means that anyone can see the directory and download files.
-* `'check-perms'` means that django permission `'directory_read'` from `django.contrib.auth` will be checked
+* `'use-perms'` means that django permission `'directory_read'` from `django.contrib.auth` will be checked
 * `'custom'` - means that function provided with `DIRECTORY_ACCESS_FUNCTION` will be called to check the permission
 
 `DIRECTORY_ACCESS_FUNCTION` - a function or python path to the custom permission checking function e.g. `'myapp.perms.check_get_backups_perm'`.
