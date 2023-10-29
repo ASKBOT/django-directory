@@ -4,10 +4,6 @@ from django.conf import settings
 from django.core.exceptions import PermissionDenied, ImproperlyConfigured
 from django.http import StreamingHttpResponse, Http404
 from django.shortcuts import render
-try:
-    from django.urls import reverse # pylint: disable=unused-import
-except ImportError:
-    from django.core.urlresolvers import reverse
 
 from django.utils.module_loading import import_string as import_module
 
